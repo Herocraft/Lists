@@ -1,116 +1,91 @@
 package com.herocraftonline.dthielke.herolist;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-import com.avaje.ebean.validation.NotEmpty;
+import com.herocraftonline.dthielke.herolist.Privilege.Level;
 
 @Entity
+@Table(name = "privileged_lists")
 public class PrivilegedList {
 
-    protected static HeroList plugin;
+	@Id
+	private int id;
+	private String name;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "list")
+	@MapKey(name = "playerName")
+	private Map<String, Privilege> players = new HashMap<String, Privilege>();
+	private boolean restricted = false;
 
-    @Id
-    private int id;
+	public PrivilegedList() {
+	}
 
-    @OneToMany(cascade=CascadeType.ALL, mappedBy="list")
-    private Set<PrivilegedPlayer> players;
+	public PrivilegedList(String name) {
+		this.name = name;
+	}
 
-    @NotEmpty
-    private String name;
+	public boolean contains(String name) {
+		return players.containsKey(name.toLowerCase());
+	}
 
-    private boolean restricted = false;
+	public void put(String name, Level level) {
+		players.put(name.toLowerCase(), new Privilege(level, this, name.toLowerCase()));
+	}
 
-    public PrivilegedList() {}
+	public Level get(String name) {
+		if (contains(name)) {
+			return players.get(name.toLowerCase()).getLevel();
+		} else {
+			return null;
+		}
+	}
 
-    public PrivilegedList(String name) {
-        this.players = new HashSet<PrivilegedPlayer>();
-        this.name = name;
-    }
-    
-    public void save() {
-        
-    }
+	public Map<String, Privilege> getPlayers() {
+		return players;
+	}
 
-    public boolean containsPlayer(String name) {
-        name = name.toLowerCase();
-        for (PrivilegedPlayer player : players) {
-            if (player.getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
+	public void setPlayers(Map<String, Privilege> players) {
+		this.players = players;
+	}
 
-    public void putPlayer(String name, PrivilegeLevel privilege) {
-        name = name.toLowerCase();
-        PrivilegedPlayer player = new PrivilegedPlayer(name, privilege);
-        // player.setList(this);
-        players.remove(player);
-        players.add(player);
-    }
+	public Set<String> getPlayerSet() {
+		return players.keySet();
+	}
 
-    public PrivilegeLevel getPrivilegeLevel(String name) {
-        name = name.toLowerCase();
-        for (PrivilegedPlayer player : players) {
-            if (player.getName().equals(name)) {
-                return player.getPrivilege();
-            }
-        }
-        return null;
-    }
+	public void remove(String name) {
+		players.remove(name.toLowerCase());
+	}
 
-    public boolean removePlayer(String name) {
-        PrivilegedPlayer player = new PrivilegedPlayer(name, PrivilegeLevel.NONE);
-        // player.setList(this);
-        return players.remove(player);
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String[] getPlayerList() {
-        List<String> names = new ArrayList<String>();
-        for (PrivilegedPlayer player : players) {
-            names.add(player.getName());
-        }
-        return names.toArray(new String[0]);
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setRestricted(boolean restricted) {
+		this.restricted = restricted;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public boolean isRestricted() {
+		return restricted;
+	}
 
-    public void setRestricted(boolean restricted) {
-        this.restricted = restricted;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public boolean isRestricted() {
-        return restricted;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Set<PrivilegedPlayer> getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(Set<PrivilegedPlayer> players) {
-        this.players = players;
-    }
+	public int getId() {
+		return id;
+	}
 
 }
