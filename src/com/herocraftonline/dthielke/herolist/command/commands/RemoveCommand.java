@@ -6,8 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.herocraftonline.dthielke.herolist.HeroList;
-import com.herocraftonline.dthielke.herolist.Privilege.Level;
 import com.herocraftonline.dthielke.herolist.PrivilegedList;
+import com.herocraftonline.dthielke.herolist.PrivilegedList.Level;
 import com.herocraftonline.dthielke.herolist.command.BaseCommand;
 import com.herocraftonline.dthielke.herolist.util.Messaging;
 
@@ -49,6 +49,7 @@ public class RemoveCommand extends BaseCommand {
 		}
 
 		list.remove(args[1]);
+		plugin.saveList(list);
 		Messaging.send(plugin, sender, "Removed player $1 from $2.", args[1], args[0]);
 	}
 

@@ -16,6 +16,7 @@ import com.herocraftonline.dthielke.herolist.HeroList;
 import com.herocraftonline.dthielke.herolist.command.BaseCommand;
 
 public class HelpCommand extends BaseCommand {
+    
     private static final int CMDS_PER_PAGE = 8;
 
     public HelpCommand(HeroList plugin) {
@@ -26,6 +27,7 @@ public class HelpCommand extends BaseCommand {
         minArgs = 0;
         maxArgs = 1;
         identifiers.add("ls help");
+        identifiers.add("ls");
     }
 
     @Override

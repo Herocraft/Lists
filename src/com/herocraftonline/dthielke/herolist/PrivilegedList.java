@@ -1,91 +1,133 @@
 package com.herocraftonline.dthielke.herolist;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.MapKey;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import com.avaje.ebean.annotation.EnumValue;
 
-import com.herocraftonline.dthielke.herolist.Privilege.Level;
-
-@Entity
-@Table(name = "privileged_lists")
 public class PrivilegedList {
 
-	@Id
-	private int id;
-	private String name;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "list")
-	@MapKey(name = "playerName")
-	private Map<String, Privilege> players = new HashMap<String, Privilege>();
-	private boolean restricted = false;
+    public enum Level {
+        @EnumValue("n")
+        NONE("n"),
 
-	public PrivilegedList() {
-	}
+        @EnumValue("v")
+        VIEWER("v"),
 
-	public PrivilegedList(String name) {
-		this.name = name;
-	}
+        @EnumValue("m")
+        MODIFIER("m"),
 
-	public boolean contains(String name) {
-		return players.containsKey(name.toLowerCase());
-	}
+        @EnumValue("o")
+        OWNER("o");
 
-	public void put(String name, Level level) {
-		players.put(name.toLowerCase(), new Privilege(level, this, name.toLowerCase()));
-	}
+        private static final HashMap<String, Level> mapping = new HashMap<String, Level>();
+        public final String abbreviation;
 
-	public Level get(String name) {
-		if (contains(name)) {
-			return players.get(name.toLowerCase()).getLevel();
-		} else {
-			return null;
-		}
-	}
+        static {
+            for (Level level : EnumSet.allOf(Level.class)) {
+                mapping.put(level.abbreviation, level);
+            }
+        }
 
-	public Map<String, Privilege> getPlayers() {
-		return players;
-	}
+        private Level(String abbreviation) {
+            this.abbreviation = abbreviation;
+        }
 
-	public void setPlayers(Map<String, Privilege> players) {
-		this.players = players;
-	}
+        public static Level parse(String name) {
+            Level mappedLevel = mapping.get(name);
+            if (mappedLevel == null) {
+                for (Level level : EnumSet.allOf(Level.class)) {
+                    System.out.println(name);
+                    System.out.println(level.name());
+                    if (name.equalsIgnoreCase(level.name())) {
+                        return level;
+                    }
+                }
+                return null;
+            } else {
+                return mappedLevel;
+            }
+        }
 
-	public Set<String> getPlayerSet() {
-		return players.keySet();
-	}
+        public boolean clears(Level reference) {
+            return this.ordinal() >= reference.ordinal();
+        }
+    }
 
-	public void remove(String name) {
-		players.remove(name.toLowerCase());
-	}
+    private String name;
+    private boolean restricted;
+    private Map<String, Level> players = new HashMap<String, Level>();
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public PrivilegedList(String name) {
+        this.name = name;
+        this.restricted = false;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public PrivilegedList(String name, boolean restricted) {
+        this.name = name;
+        this.restricted = restricted;
+    }
 
-	public void setRestricted(boolean restricted) {
-		this.restricted = restricted;
-	}
+    public String toString() {
+        String map = "[";
+        for (Entry<String, Level> entry : players.entrySet()) {
+            map += entry.getKey() + ":" + entry.getValue().abbreviation + ", ";
+        }
+        if (players.size() != 0) {
+            map = map.substring(0, map.length() - 2) + "]";
+        }
+        return "{" + name + ", " + restricted + ", " + map + "}";
+    }
 
-	public boolean isRestricted() {
-		return restricted;
-	}
+    public boolean contains(String name) {
+        return players.containsKey(name.toLowerCase());
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void put(String name, Level level) {
+        players.put(name.toLowerCase(), level);
+    }
 
-	public int getId() {
-		return id;
-	}
+    public Level get(String name) {
+        if (contains(name)) {
+            return players.get(name.toLowerCase());
+        } else {
+            return null;
+        }
+    }
+
+    public Map<String, Level> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(Map<String, Level> players) {
+        this.players = players;
+    }
+
+    public Set<String> getPlayerSet() {
+        return players.keySet();
+    }
+
+    public void remove(String name) {
+        players.remove(name.toLowerCase());
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setRestricted(boolean restricted) {
+        this.restricted = restricted;
+    }
+
+    public boolean isRestricted() {
+        return restricted;
+    }
 
 }

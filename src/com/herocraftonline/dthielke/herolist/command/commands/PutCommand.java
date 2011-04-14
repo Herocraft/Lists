@@ -6,8 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.herocraftonline.dthielke.herolist.HeroList;
-import com.herocraftonline.dthielke.herolist.Privilege.Level;
 import com.herocraftonline.dthielke.herolist.PrivilegedList;
+import com.herocraftonline.dthielke.herolist.PrivilegedList.Level;
 import com.herocraftonline.dthielke.herolist.command.BaseCommand;
 import com.herocraftonline.dthielke.herolist.util.Messaging;
 
@@ -71,6 +71,7 @@ public class PutCommand extends BaseCommand {
 		}
 
 		list.put(args[1], privilege);
+		plugin.saveList(list);
 		Messaging.send(plugin, sender, "Added $1 to $2 with $3 privileges.", args[1], args[0], privilege.name());
 
 	}
