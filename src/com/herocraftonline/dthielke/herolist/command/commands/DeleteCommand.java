@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.herocraftonline.dthielke.herolist.HeroList;
 import com.herocraftonline.dthielke.herolist.PrivilegedList;
+import com.herocraftonline.dthielke.herolist.HeroList.Permission;
 import com.herocraftonline.dthielke.herolist.PrivilegedList.Level;
 import com.herocraftonline.dthielke.herolist.command.BaseCommand;
 import com.herocraftonline.dthielke.herolist.util.Messaging;
@@ -26,6 +27,15 @@ public class DeleteCommand extends BaseCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
+	    Player player = null;
+        if (sender instanceof Player) {
+            player = (Player) sender;
+            if (!plugin.hasPermission(player, Permission.DELETE) && !plugin.hasPermission(player, Permission.ADMIN_DELETE)) {
+                Messaging.send(plugin, sender, "You do not have permission.");
+                return;
+            }
+        }
+	    
 		Map<String, PrivilegedList> lists = plugin.getLists();
 		if (!lists.containsKey(args[0])) {
 			Messaging.send(plugin, sender, "There is no list named $1.", args[0]);
@@ -34,8 +44,8 @@ public class DeleteCommand extends BaseCommand {
 
 		PrivilegedList list = lists.get(args[0]);
 
-		if (sender instanceof Player) {
-			String name = ((Player) sender).getName();
+		if (player != null && !plugin.hasPermission(player, Permission.ADMIN_DELETE)) {
+			String name = player.getName();
 
 			if (!list.contains(name)) {
 				Messaging.send(plugin, sender, "You are not in $1.", args[0]);

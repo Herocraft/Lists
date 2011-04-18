@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.herocraftonline.dthielke.herolist.HeroList;
 import com.herocraftonline.dthielke.herolist.PrivilegedList;
+import com.herocraftonline.dthielke.herolist.HeroList.Permission;
 import com.herocraftonline.dthielke.herolist.PrivilegedList.Level;
 import com.herocraftonline.dthielke.herolist.command.BaseCommand;
 import com.herocraftonline.dthielke.herolist.util.Messaging;
@@ -30,7 +31,11 @@ public class ListCommand extends BaseCommand {
     public void execute(CommandSender sender, String[] args) {
         Player player = null;
         if (sender instanceof Player) {
-            player = (Player) player;
+            player = (Player) sender;
+            if (!plugin.hasPermission(player, Permission.LIST) && !plugin.hasPermission(player, Permission.ADMIN_LIST)) {
+                Messaging.send(plugin, sender, "You do not have permission.");
+                return;
+            }
         }
         
         List<PrivilegedList> lists = new ArrayList<PrivilegedList>();
@@ -39,7 +44,7 @@ public class ListCommand extends BaseCommand {
             if (player != null) {
                 level = list.get(player.getName());
             }
-            if (player == null || !list.isRestricted() || level.clears(Level.VIEWER)) {
+            if (player == null || !list.isRestricted() || level.clears(Level.VIEWER) || plugin.hasPermission(player, Permission.ADMIN_LIST)) {
                 lists.add(list);
             }
         }

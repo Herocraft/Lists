@@ -1,5 +1,9 @@
 package com.herocraftonline.dthielke.herolist;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -9,10 +13,17 @@ import java.util.regex.Pattern;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event.Priority;
+import org.bukkit.event.Event.Type;
+import org.bukkit.event.server.ServerListener;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
 import com.herocraftonline.dthielke.herolist.command.CommandManager;
+import com.herocraftonline.dthielke.herolist.command.commands.AddCommand;
 import com.herocraftonline.dthielke.herolist.command.commands.ListCommand;
 import com.herocraftonline.dthielke.herolist.command.commands.PutCommand;
 import com.herocraftonline.dthielke.herolist.command.commands.DeleteCommand;
@@ -21,10 +32,35 @@ import com.herocraftonline.dthielke.herolist.command.commands.CreateCommand;
 import com.herocraftonline.dthielke.herolist.command.commands.ViewCommand;
 import com.herocraftonline.dthielke.herolist.command.commands.RemoveCommand;
 import com.herocraftonline.dthielke.herolist.io.HeroListSQLHandler;
+import com.nijiko.permissions.PermissionHandler;
+import com.nijikokun.bukkit.Permissions.Permissions;
 
 public class HeroList extends JavaPlugin {
 
+    public enum Permission {
+        LIST("user.list"),
+        ADMIN_LIST("admin.list"),
+        CREATE("user.create"),
+        DELETE("user.delete"),
+        ADMIN_DELETE("admin.delete"),
+        PUT("user.put"),
+        ADMIN_PUT("admin.put"),
+        VIEW("user.view"),
+        ADMIN_VIEW("admin.view"),
+        REMOVE("user.remove"),
+        ADD("user.add"),
+        ADMIN_ADD("admin.add");
+
+        public final String node;
+
+        private Permission(String node) {
+            this.node = node;
+        }
+    }
+
     private final Logger log = Logger.getLogger("Minecraft");
+    private ServerListener serverListener = new HLServerListener(this);
+    private PermissionHandler security;
     private CommandManager commandManager;
     private HeroListSQLHandler sql;
     private Map<String, PrivilegedList> lists = new HashMap<String, PrivilegedList>();
@@ -40,7 +76,8 @@ public class HeroList extends JavaPlugin {
     @Override
     public void onEnable() {
         log(Level.INFO, "version " + getDescription().getVersion() + " enabled.");
-
+        loadPermissions();
+        registerEvents();
         registerCommands();
         if (createSQLHandler()) {
             sql.setupDatabase();
@@ -57,19 +94,47 @@ public class HeroList extends JavaPlugin {
         return commandManager.dispatch(sender, command, label, args);
     }
 
+    public void loadPermissions() {
+        Plugin plugin = this.getServer().getPluginManager().getPlugin("Permissions");
+        if (plugin != null) {
+            if (plugin.isEnabled()) {
+                Permissions permissions = (Permissions) plugin;
+                security = permissions.getHandler();
+                log(Level.INFO, "Permissions " + permissions.getDescription().getVersion() + " found.");
+            }
+        }
+    }
+
+    public void unloadPermissions() {
+        if (security != null) {
+            security = null;
+            log(Level.INFO, "Permissions lost.");
+        }
+    }
+
+    private void registerEvents() {
+        PluginManager pm = getServer().getPluginManager();
+        pm.registerEvent(Type.PLUGIN_ENABLE, serverListener, Priority.Monitor, this);
+        pm.registerEvent(Type.PLUGIN_DISABLE, serverListener, Priority.Monitor, this);
+    }
+
     private void registerCommands() {
         commandManager = new CommandManager();
+        commandManager.addCommand(new ListCommand(this));
+        commandManager.addCommand(new ViewCommand(this));
         commandManager.addCommand(new PutCommand(this));
+        commandManager.addCommand(new AddCommand(this));
+        commandManager.addCommand(new RemoveCommand(this));
         commandManager.addCommand(new CreateCommand(this));
         commandManager.addCommand(new DeleteCommand(this));
         commandManager.addCommand(new HelpCommand(this));
-        commandManager.addCommand(new ListCommand(this));
-        commandManager.addCommand(new ViewCommand(this));
-        commandManager.addCommand(new RemoveCommand(this));
     }
 
     private boolean createSQLHandler() {
-        Configuration config = getConfiguration();
+        checkConfig();
+        Configuration config = new Configuration(new File(getDataFolder(), "config.yml"));
+        config.load();
+        
         String driver = config.getString("database.driver");
         String url = config.getString("database.URL");
         String user = config.getString("database.user", "");
@@ -86,6 +151,39 @@ public class HeroList extends JavaPlugin {
             } else {
                 return false;
             }
+        }
+    }
+    
+    private void checkConfig() {
+        File configFile = new File(getDataFolder(), "config.yml");
+        if (!configFile.exists()) {
+            try {
+                configFile.getParentFile().mkdir();
+                configFile.createNewFile();
+                OutputStream output = new FileOutputStream(configFile, false);
+                InputStream input = HeroList.class.getResourceAsStream("/defaults/config.yml");
+                byte[] buf = new byte[8192];
+                while (true) {
+                    int length = input.read(buf);
+                    if (length < 0) {
+                        break;
+                    }
+                    output.write(buf, 0, length);
+                }
+                input.close();
+                output.close();
+                log(Level.WARNING, "Default config created. You may need to configure it.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean hasPermission(Player player, Permission permission) {
+        if (security != null) {
+            return security.has(player, "herolist." + permission.node);
+        } else {
+            return player.isOp();
         }
     }
 

@@ -6,21 +6,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.avaje.ebean.annotation.EnumValue;
-
 public class PrivilegedList {
 
     public enum Level {
-        @EnumValue("n")
         NONE("n"),
-
-        @EnumValue("v")
         VIEWER("v"),
-
-        @EnumValue("m")
         MODIFIER("m"),
-
-        @EnumValue("o")
         OWNER("o");
 
         private static final HashMap<String, Level> mapping = new HashMap<String, Level>();
@@ -59,7 +50,7 @@ public class PrivilegedList {
 
     private String name;
     private boolean restricted;
-    private Map<String, Level> players = new HashMap<String, Level>();
+    private Map<String, Level> users = new HashMap<String, Level>();
 
     public PrivilegedList(String name) {
         this.name = name;
@@ -73,45 +64,45 @@ public class PrivilegedList {
 
     public String toString() {
         String map = "[";
-        for (Entry<String, Level> entry : players.entrySet()) {
+        for (Entry<String, Level> entry : users.entrySet()) {
             map += entry.getKey() + ":" + entry.getValue().abbreviation + ", ";
         }
-        if (players.size() != 0) {
+        if (users.size() != 0) {
             map = map.substring(0, map.length() - 2) + "]";
         }
         return "{" + name + ", " + restricted + ", " + map + "}";
     }
 
     public boolean contains(String name) {
-        return players.containsKey(name.toLowerCase());
+        return users.containsKey(name.toLowerCase());
     }
 
     public void put(String name, Level level) {
-        players.put(name.toLowerCase(), level);
+        users.put(name.toLowerCase(), level);
     }
 
     public Level get(String name) {
         if (contains(name)) {
-            return players.get(name.toLowerCase());
+            return users.get(name.toLowerCase());
         } else {
             return null;
         }
     }
 
-    public Map<String, Level> getPlayers() {
-        return players;
+    public Map<String, Level> getUsers() {
+        return users;
     }
 
-    public void setPlayers(Map<String, Level> players) {
-        this.players = players;
+    public void setUsers(Map<String, Level> users) {
+        this.users = users;
     }
 
-    public Set<String> getPlayerSet() {
-        return players.keySet();
+    public Set<String> getUserSet() {
+        return users.keySet();
     }
 
     public void remove(String name) {
-        players.remove(name.toLowerCase());
+        users.remove(name.toLowerCase());
     }
 
     public void setName(String name) {

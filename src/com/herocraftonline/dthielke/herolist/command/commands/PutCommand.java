@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.herocraftonline.dthielke.herolist.HeroList;
 import com.herocraftonline.dthielke.herolist.PrivilegedList;
+import com.herocraftonline.dthielke.herolist.HeroList.Permission;
 import com.herocraftonline.dthielke.herolist.PrivilegedList.Level;
 import com.herocraftonline.dthielke.herolist.command.BaseCommand;
 import com.herocraftonline.dthielke.herolist.util.Messaging;
@@ -15,7 +16,7 @@ public class PutCommand extends BaseCommand {
 
 	public PutCommand(HeroList plugin) {
 		super(plugin);
-		name = "Add Player";
+		name = "Put Player";
 		description = "Adds or modifies a player to an existing list";
 		usage = "§e/ls put §9<list> §9<player> §8-[n|v|m|o]";
 		minArgs = 2;
@@ -30,6 +31,15 @@ public class PutCommand extends BaseCommand {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
+	    Player player = null;
+        if (sender instanceof Player) {
+            player = (Player) sender;
+            if (!plugin.hasPermission(player, Permission.PUT) && !plugin.hasPermission(player, Permission.ADMIN_PUT)) {
+                Messaging.send(plugin, sender, "You do not have permission.");
+                return;
+            }
+        }
+	    
 		Map<String, PrivilegedList> lists = plugin.getLists();
 		if (!lists.containsKey(args[0])) {
 			Messaging.send(plugin, sender, "There is no list named $1.", args[0]);
@@ -44,8 +54,8 @@ public class PutCommand extends BaseCommand {
 
 		PrivilegedList list = lists.get(args[0]);
 
-		if (sender instanceof Player) {
-			String name = ((Player) sender).getName();
+		if (player != null && !plugin.hasPermission(player, Permission.ADMIN_PUT)) {
+			String name = player.getName();
 
 			if (!list.contains(name)) {
 				Messaging.send(plugin, sender, "You are not a member of $1.", args[0]);

@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.herocraftonline.dthielke.herolist.HeroList;
 import com.herocraftonline.dthielke.herolist.PrivilegedList;
+import com.herocraftonline.dthielke.herolist.HeroList.Permission;
 import com.herocraftonline.dthielke.herolist.PrivilegedList.Level;
 import com.herocraftonline.dthielke.herolist.command.BaseCommand;
 import com.herocraftonline.dthielke.herolist.util.Messaging;
@@ -25,7 +26,16 @@ public class CreateCommand extends BaseCommand {
 	}
 
 	@Override
-	public void execute(CommandSender sender, String[] args) {
+	public void execute(CommandSender sender, String[] args) {	 
+	    Player player = null;
+	    if (sender instanceof Player) {
+            player = (Player) sender;
+            if (!plugin.hasPermission(player, Permission.CREATE)) {
+                Messaging.send(plugin, sender, "You do not have permission.");
+                return;
+            }
+	    }
+	    
 		Map<String, PrivilegedList> lists = plugin.getLists();
 		if (lists.containsKey(args[0])) {
 			Messaging.send(plugin, sender, "The list name $1 is already being used.", args[0]);
@@ -34,9 +44,8 @@ public class CreateCommand extends BaseCommand {
 
 		PrivilegedList list = new PrivilegedList(args[0]);
 
-		if (sender instanceof Player) {
-			String name = ((Player) sender).getName();
-			list.put(name, Level.OWNER);
+		if (player != null) {
+			list.put(player.getName(), Level.OWNER);
 		}
 
 		if (args.length == 2 && args[1].equals("-r")) {

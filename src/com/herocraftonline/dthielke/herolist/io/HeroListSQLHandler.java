@@ -140,7 +140,7 @@ public class HeroListSQLHandler extends SQLHandler {
 
             // add the users
             PreparedStatement userInsert = db.prepareStatement(SQL_INSERT_USER);
-            Map<String, Level> users = list.getPlayers();
+            Map<String, Level> users = list.getUsers();
             for (String user : users.keySet()) {
                 userInsert.setString(1, user);
                 userInsert.setByte(2, (byte) users.get(user).ordinal());
@@ -169,7 +169,7 @@ public class HeroListSQLHandler extends SQLHandler {
             PreparedStatement userQuery = db.prepareStatement(SQL_SELECT_USER);
             PreparedStatement userInsert = db.prepareStatement(SQL_INSERT_USER);
             PreparedStatement userUpdate = db.prepareStatement(SQL_UPDATE_USER);
-            Map<String, Level> users = list.getPlayers();
+            Map<String, Level> users = list.getUsers();
             for (String user : users.keySet()) {
                 userQuery.setString(1, user);
                 userQuery.setInt(2, listId);

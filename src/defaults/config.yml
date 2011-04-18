@@ -1,0 +1,13 @@
+# Place all JDBC drivers in <main-server-folder>/lib/
+# The filename does not matter
+
+#database:
+#    driver: 'com.mysql.jdbc.Driver'
+#    URL: 'jdbc:mysql://your_database_url:3306/database_name'
+#    user: 
+#    password: 
+database:
+    driver: 'org.sqlite.JDBC'
+    URL: 'jdbc:sqlite:plugins/HeroList/herolist.db'
+    user: 
+    password: 
