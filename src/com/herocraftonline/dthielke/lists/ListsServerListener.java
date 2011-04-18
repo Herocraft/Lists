@@ -1,15 +1,15 @@
-package com.herocraftonline.dthielke.herolist;
+package com.herocraftonline.dthielke.lists;
 
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
 import org.bukkit.plugin.Plugin;
 
-public class HLServerListener extends ServerListener {
+public class ListsServerListener extends ServerListener {
 
-    private HeroList plugin;
+    private Lists plugin;
     
-    public HLServerListener(HeroList plugin) {
+    public ListsServerListener(Lists plugin) {
         this.plugin = plugin;
     }
     

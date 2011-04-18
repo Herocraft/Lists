@@ -1,4 +1,4 @@
-package com.herocraftonline.dthielke.herolist;
+package com.herocraftonline.dthielke.lists;
 
 import java.util.EnumSet;
 import java.util.HashMap;

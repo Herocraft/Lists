@@ -1,4 +1,4 @@
-package com.herocraftonline.dthielke.herolist;
+package com.herocraftonline.dthielke.lists;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,20 +22,20 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.config.Configuration;
 
-import com.herocraftonline.dthielke.herolist.command.CommandManager;
-import com.herocraftonline.dthielke.herolist.command.commands.AddCommand;
-import com.herocraftonline.dthielke.herolist.command.commands.ListCommand;
-import com.herocraftonline.dthielke.herolist.command.commands.PutCommand;
-import com.herocraftonline.dthielke.herolist.command.commands.DeleteCommand;
-import com.herocraftonline.dthielke.herolist.command.commands.HelpCommand;
-import com.herocraftonline.dthielke.herolist.command.commands.CreateCommand;
-import com.herocraftonline.dthielke.herolist.command.commands.ViewCommand;
-import com.herocraftonline.dthielke.herolist.command.commands.RemoveCommand;
-import com.herocraftonline.dthielke.herolist.io.HeroListSQLHandler;
+import com.herocraftonline.dthielke.lists.command.CommandManager;
+import com.herocraftonline.dthielke.lists.command.commands.AddCommand;
+import com.herocraftonline.dthielke.lists.command.commands.CreateCommand;
+import com.herocraftonline.dthielke.lists.command.commands.DeleteCommand;
+import com.herocraftonline.dthielke.lists.command.commands.HelpCommand;
+import com.herocraftonline.dthielke.lists.command.commands.ListCommand;
+import com.herocraftonline.dthielke.lists.command.commands.PutCommand;
+import com.herocraftonline.dthielke.lists.command.commands.RemoveCommand;
+import com.herocraftonline.dthielke.lists.command.commands.ViewCommand;
+import com.herocraftonline.dthielke.lists.io.ListsSQLHandler;
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
-public class HeroList extends JavaPlugin {
+public class Lists extends JavaPlugin {
 
     public enum Permission {
         LIST("user.list"),
@@ -59,10 +59,10 @@ public class HeroList extends JavaPlugin {
     }
 
     private final Logger log = Logger.getLogger("Minecraft");
-    private ServerListener serverListener = new HLServerListener(this);
+    private ServerListener serverListener = new ListsServerListener(this);
     private PermissionHandler security;
     private CommandManager commandManager;
-    private HeroListSQLHandler sql;
+    private ListsSQLHandler sql;
     private Map<String, PrivilegedList> lists = new HashMap<String, PrivilegedList>();
 
     @Override
@@ -146,7 +146,7 @@ public class HeroList extends JavaPlugin {
             Pattern pattern = Pattern.compile("\\w+\\z");
             Matcher matcher = pattern.matcher(url);
             if (matcher.find()) {
-                sql = new HeroListSQLHandler(matcher.group(), driver, url, user, password);
+                sql = new ListsSQLHandler(matcher.group(), driver, url, user, password);
                 return true;
             } else {
                 return false;
@@ -161,7 +161,7 @@ public class HeroList extends JavaPlugin {
                 configFile.getParentFile().mkdir();
                 configFile.createNewFile();
                 OutputStream output = new FileOutputStream(configFile, false);
-                InputStream input = HeroList.class.getResourceAsStream("/defaults/config.yml");
+                InputStream input = Lists.class.getResourceAsStream("/defaults/config.yml");
                 byte[] buf = new byte[8192];
                 while (true) {
                     int length = input.read(buf);

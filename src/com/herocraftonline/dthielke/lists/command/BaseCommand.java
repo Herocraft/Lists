@@ -6,18 +6,18 @@
  * Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
  **/
 
-package com.herocraftonline.dthielke.herolist.command;
+package com.herocraftonline.dthielke.lists.command;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
-import com.herocraftonline.dthielke.herolist.HeroList;
+import com.herocraftonline.dthielke.lists.Lists;
 
 public abstract class BaseCommand {
 
-    protected HeroList plugin;
+    protected Lists plugin;
     protected String name;
     protected String description;
     protected String usage;
@@ -26,7 +26,7 @@ public abstract class BaseCommand {
     protected List<String> identifiers;
     protected List<String> notes;
 
-    public BaseCommand(HeroList plugin) {
+    public BaseCommand(Lists plugin) {
         this.plugin = plugin;
         this.identifiers = new ArrayList<String>();
         this.notes = new ArrayList<String>();

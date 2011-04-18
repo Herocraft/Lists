@@ -1,4 +1,4 @@
-package com.herocraftonline.dthielke.herolist.util;
+package com.herocraftonline.dthielke.lists.util;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;

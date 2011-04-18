@@ -1,20 +1,20 @@
-package com.herocraftonline.dthielke.herolist.command.commands;
+package com.herocraftonline.dthielke.lists.command.commands;
 
 import java.util.Map;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.herocraftonline.dthielke.herolist.HeroList;
-import com.herocraftonline.dthielke.herolist.PrivilegedList;
-import com.herocraftonline.dthielke.herolist.HeroList.Permission;
-import com.herocraftonline.dthielke.herolist.PrivilegedList.Level;
-import com.herocraftonline.dthielke.herolist.command.BaseCommand;
-import com.herocraftonline.dthielke.herolist.util.Messaging;
+import com.herocraftonline.dthielke.lists.Lists;
+import com.herocraftonline.dthielke.lists.PrivilegedList;
+import com.herocraftonline.dthielke.lists.Lists.Permission;
+import com.herocraftonline.dthielke.lists.PrivilegedList.Level;
+import com.herocraftonline.dthielke.lists.command.BaseCommand;
+import com.herocraftonline.dthielke.lists.util.Messaging;
 
 public class AddCommand extends BaseCommand {
 
-    public AddCommand(HeroList plugin) {
+    public AddCommand(Lists plugin) {
         super(plugin);
         name = "Add Players";
         description = "Adds multiple players to existing list with no privileges";

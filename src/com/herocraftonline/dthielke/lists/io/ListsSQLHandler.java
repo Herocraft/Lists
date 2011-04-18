@@ -1,4 +1,4 @@
-package com.herocraftonline.dthielke.herolist.io;
+package com.herocraftonline.dthielke.lists.io;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,10 +7,10 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.herocraftonline.dthielke.herolist.PrivilegedList;
-import com.herocraftonline.dthielke.herolist.PrivilegedList.Level;
+import com.herocraftonline.dthielke.lists.PrivilegedList;
+import com.herocraftonline.dthielke.lists.PrivilegedList.Level;
 
-public class HeroListSQLHandler extends SQLHandler {
+public class ListsSQLHandler extends SQLHandler {
 
     private static final String MYSQL_CREATE_LISTS_TABLE = "CREATE TABLE IF NOT EXISTS privileged_lists (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(50) UNIQUE NOT NULL, restricted TINYINT(1) NOT NULL, PRIMARY KEY (id))";
     private static final String MYSQL_CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS privileged_users (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(16) NOT NULL, level TINYINT(1) NOT NULL, list_id INT NOT NULL, PRIMARY KEY (id), FOREIGN KEY (list_id) REFERENCES privileged_lists(id))";
@@ -28,7 +28,7 @@ public class HeroListSQLHandler extends SQLHandler {
     private static final String SQL_UPDATE_LIST = "UPDATE privilege_lists SET restricted = ? WHERE id = ?";
     private static final String SQL_UPDATE_USER = "UPDATE privileged_users SET level = ? WHERE name = ? AND list_id = ?";
 
-    public HeroListSQLHandler(String database, String driver, String dbURL, String username, String password) {
+    public ListsSQLHandler(String database, String driver, String dbURL, String username, String password) {
         super(database, driver, dbURL, username, password);
     }
 

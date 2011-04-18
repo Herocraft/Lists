@@ -1,4 +1,4 @@
-package com.herocraftonline.dthielke.herolist.io;
+package com.herocraftonline.dthielke.lists.io;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

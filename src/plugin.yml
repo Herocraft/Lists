@@ -1,8 +1,8 @@
-name: HeroList
-main: com.herocraftonline.dthielke.herolist.HeroList
+name: Lists
+main: com.herocraftonline.dthielke.lists.Lists
 version: 0.0.1
 description: Basic player list API for other plugins to make use of.
 commands:
   ls:
-    description: HeroList commands
+    description: Lists commands
     usage: /ls <command>

@@ -6,20 +6,20 @@
  * Creative Commons, 171 Second Street, Suite 300, San Francisco, California, 94105, USA.
  **/
 
-package com.herocraftonline.dthielke.herolist.command.commands;
+package com.herocraftonline.dthielke.lists.command.commands;
 
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
-import com.herocraftonline.dthielke.herolist.HeroList;
-import com.herocraftonline.dthielke.herolist.command.BaseCommand;
+import com.herocraftonline.dthielke.lists.Lists;
+import com.herocraftonline.dthielke.lists.command.BaseCommand;
 
 public class HelpCommand extends BaseCommand {
     
     private static final int CMDS_PER_PAGE = 8;
 
-    public HelpCommand(HeroList plugin) {
+    public HelpCommand(Lists plugin) {
         super(plugin);
         name = "Help";
         description = "Displays the help menu";
