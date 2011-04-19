@@ -1,7 +1,5 @@
 package com.herocraftonline.dthielke.lists.command.commands;
 
-import java.util.Map;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -36,13 +34,13 @@ public class CreateCommand extends BaseCommand {
             }
 	    }
 	    
-		Map<String, PrivilegedList> lists = plugin.getLists();
-		if (lists.containsKey(args[0])) {
+	    PrivilegedList list = plugin.getList(args[0]);
+        if (list != null) {
 			Messaging.send(plugin, sender, "The list name $1 is already being used.", args[0]);
 			return;
 		}
-
-		PrivilegedList list = new PrivilegedList(args[0]);
+        
+        list = new PrivilegedList(args[0]);
 
 		if (player != null) {
 			list.put(player.getName(), Level.OWNER);

@@ -4,10 +4,12 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 public class PrivilegedList {
 
+    /***
+     * Enumeration of the four available privilege levels for members of a list.
+     */
     public enum Level {
         NONE("n"),
         VIEWER("v"),
@@ -52,11 +54,22 @@ public class PrivilegedList {
     private boolean restricted;
     private Map<String, Level> users = new HashMap<String, Level>();
 
+    /***
+     * Creates a new list with a specified name. By default, a list is unrestricted, so anyone can view its members.
+     * 
+     * @param name the name of the list
+     */
     public PrivilegedList(String name) {
         this.name = name;
         this.restricted = false;
     }
 
+    /***
+     * Creates a new list with a specified name and restriction status.
+     * 
+     * @param name the name of the list
+     * @param restricted if true, only members of the list with a privilege <code>Level</code> of <code>VIEWER</code> or above can view the list; otherwise, anyone can view the list.
+     */
     public PrivilegedList(String name, boolean restricted) {
         this.name = name;
         this.restricted = restricted;
@@ -69,6 +82,8 @@ public class PrivilegedList {
         }
         if (users.size() != 0) {
             map = map.substring(0, map.length() - 2) + "]";
+        } else {
+            map = map + "]";
         }
         return "{" + name + ", " + restricted + ", " + map + "}";
     }
@@ -95,10 +110,6 @@ public class PrivilegedList {
 
     public void setUsers(Map<String, Level> users) {
         this.users = users;
-    }
-
-    public Set<String> getUserSet() {
-        return users.keySet();
     }
 
     public void remove(String name) {

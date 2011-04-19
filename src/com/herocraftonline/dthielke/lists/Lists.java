@@ -186,25 +186,45 @@ public class Lists extends JavaPlugin {
             return player.isOp();
         }
     }
+    
+    /***
+     * Returns an array of all existing lists.
+     * 
+     * @return an array containing all existing <code>PrivilegedList<code>s.
+     */
+    public final PrivilegedList[] getLists() {
+        return lists.values().toArray(new PrivilegedList[0]);
+    }
 
+    /***
+     * Gets an existing list by its name.
+     * 
+     * @param name the name of the list (case-sensitive)
+     * @return the <code>PrivilegedList</code> associated with the name, or <code>null</code> if no such list exists
+     */
     public PrivilegedList getList(String name) {
         return lists.get(name);
     }
 
+    /***
+     * Saves a new list or updates an existing list.
+     * 
+     * @param list the <code>PrivilegedList</code> to save
+     */
     public void saveList(PrivilegedList list) {
-        log(Level.INFO, "Saving list " + list);
         lists.put(list.getName(), list);
         sql.saveList(list);
     }
 
+    /***
+     * Deletes a list from memory and the database.
+     * 
+     * @param list the <code>PrivilegedList</code> to delete
+     */
     public void deleteList(PrivilegedList list) {
         log(Level.INFO, "Deleting list " + list);
         lists.remove(list.getName());
         sql.deleteList(list.getName());
-    }
-
-    public Map<String, PrivilegedList> getLists() {
-        return lists;
     }
 
     public void log(Level level, String msg) {

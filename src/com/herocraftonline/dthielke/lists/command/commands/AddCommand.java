@@ -1,7 +1,5 @@
 package com.herocraftonline.dthielke.lists.command.commands;
 
-import java.util.Map;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -35,13 +33,11 @@ public class AddCommand extends BaseCommand {
             }
         }
 
-        Map<String, PrivilegedList> lists = plugin.getLists();
-        if (!lists.containsKey(args[0])) {
+        PrivilegedList list = plugin.getList(args[0]);
+        if (list == null) {
             Messaging.send(plugin, sender, "There is no list named $1.", args[0]);
             return;
         }
-
-        PrivilegedList list = lists.get(args[0]);
 
         if (player != null && !plugin.hasPermission(player, Permission.ADMIN_ADD)) {
             String name = player.getName();

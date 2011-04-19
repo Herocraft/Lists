@@ -39,7 +39,7 @@ public class ListCommand extends BaseCommand {
         }
         
         List<PrivilegedList> lists = new ArrayList<PrivilegedList>();
-        for (PrivilegedList list : plugin.getLists().values()) {
+        for (PrivilegedList list : plugin.getLists()) {
             Level level = null;
             if (player != null) {
                 level = list.get(player.getName());

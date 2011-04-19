@@ -1,6 +1,5 @@
 package com.herocraftonline.dthielke.lists.command.commands;
 
-import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.command.CommandSender;
@@ -36,13 +35,11 @@ public class ViewCommand extends BaseCommand {
             }
         }
 
-        Map<String, PrivilegedList> lists = plugin.getLists();
-        if (!lists.containsKey(args[0])) {
+        PrivilegedList list = plugin.getList(args[0]);
+        if (list == null) {
             Messaging.send(plugin, sender, "There is no list named $1.", args[0]);
             return;
         }
-
-        PrivilegedList list = lists.get(args[0]);
 
         if (player != null) {
             String name = player.getName();
@@ -56,7 +53,7 @@ public class ViewCommand extends BaseCommand {
             }
         }
 
-        Set<String> players = list.getUserSet();
+        Set<String> players = list.getUsers().keySet();
         if (!players.isEmpty()) {
             String msg = args[0] + ": ";
             for (String name : players) {
