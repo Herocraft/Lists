@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.herocraftonline.dthielke.lists.Lists;
 import com.herocraftonline.dthielke.lists.PrivilegedList;
 import com.herocraftonline.dthielke.lists.Lists.Permission;
-import com.herocraftonline.dthielke.lists.PrivilegedList.Level;
+import com.herocraftonline.dthielke.lists.PrivilegedList.PrivilegeLevel;
 import com.herocraftonline.dthielke.lists.command.BaseCommand;
 import com.herocraftonline.dthielke.lists.util.Messaging;
 
@@ -44,7 +44,7 @@ public class ViewCommand extends BaseCommand {
         if (player != null) {
             String name = player.getName();
             if (list.isRestricted()) {
-                if (!list.contains(name) || !list.get(name).clears(Level.VIEWER)) {
+                if (!list.contains(name) || !list.get(name).clears(PrivilegeLevel.VIEWER)) {
                     if (!plugin.hasPermission(player, Permission.ADMIN_VIEW)) {
                         Messaging.send(plugin, sender, "You cannot view $1.", args[0]);
                         return;

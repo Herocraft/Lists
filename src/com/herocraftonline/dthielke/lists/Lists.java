@@ -35,8 +35,15 @@ import com.herocraftonline.dthielke.lists.io.ListsSQLHandler;
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
+/***
+ * Bukkit plugin which allows users to create persistent lists of players that can be accessed and modified by other plugins.
+ * Lists are typically stored in SQLite or MySQL databases, but all storage is handled internally.
+ */
 public class Lists extends JavaPlugin {
 
+    /***
+     * Internal usage only.
+     */
     public enum Permission {
         LIST("user.list"),
         ADMIN_LIST("admin.list"),
@@ -65,6 +72,9 @@ public class Lists extends JavaPlugin {
     private ListsSQLHandler sql;
     private Map<String, PrivilegedList> lists = new HashMap<String, PrivilegedList>();
 
+    /***
+     * Internal usage only.
+     */
     @Override
     public void onDisable() {
         log(Level.INFO, "version " + getDescription().getVersion() + " disabled.");
@@ -73,6 +83,9 @@ public class Lists extends JavaPlugin {
         }
     }
 
+    /***
+     * Internal usage only.
+     */
     @Override
     public void onEnable() {
         log(Level.INFO, "version " + getDescription().getVersion() + " enabled.");
@@ -89,11 +102,17 @@ public class Lists extends JavaPlugin {
         }
     }
 
+    /***
+     * Internal usage only.
+     */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         return commandManager.dispatch(sender, command, label, args);
     }
 
+    /***
+     * Internal usage only.
+     */
     public void loadPermissions() {
         Plugin plugin = this.getServer().getPluginManager().getPlugin("Permissions");
         if (plugin != null) {
@@ -105,6 +124,9 @@ public class Lists extends JavaPlugin {
         }
     }
 
+    /***
+     * Internal usage only.
+     */
     public void unloadPermissions() {
         if (security != null) {
             security = null;
@@ -179,6 +201,9 @@ public class Lists extends JavaPlugin {
         }
     }
 
+    /***
+     * Internal usage only.
+     */
     public boolean hasPermission(Player player, Permission permission) {
         if (security != null) {
             return security.has(player, "lists." + permission.node);
@@ -190,7 +215,7 @@ public class Lists extends JavaPlugin {
     /***
      * Returns an array of all existing lists.
      * 
-     * @return an array containing all existing <code>PrivilegedList<code>s.
+     * @return an array containing all existing <code>PrivilegedList</code>s.
      */
     public final PrivilegedList[] getLists() {
         return lists.values().toArray(new PrivilegedList[0]);
@@ -227,10 +252,16 @@ public class Lists extends JavaPlugin {
         sql.deleteList(list.getName());
     }
 
+    /***
+     * Internal usage only.
+     */
     public void log(Level level, String msg) {
         log.log(level, "[Lists] " + msg);
     }
 
+    /***
+     * Internal usage only.
+     */
     public CommandManager getCommandManager() {
         return commandManager;
     }

@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import com.herocraftonline.dthielke.lists.Lists;
 import com.herocraftonline.dthielke.lists.PrivilegedList;
 import com.herocraftonline.dthielke.lists.Lists.Permission;
-import com.herocraftonline.dthielke.lists.PrivilegedList.Level;
+import com.herocraftonline.dthielke.lists.PrivilegedList.PrivilegeLevel;
 import com.herocraftonline.dthielke.lists.command.BaseCommand;
 import com.herocraftonline.dthielke.lists.util.Messaging;
 
@@ -40,11 +40,11 @@ public class ListCommand extends BaseCommand {
         
         List<PrivilegedList> lists = new ArrayList<PrivilegedList>();
         for (PrivilegedList list : plugin.getLists()) {
-            Level level = null;
+            PrivilegeLevel level = null;
             if (player != null) {
                 level = list.get(player.getName());
             }
-            if (player == null || !list.isRestricted() || level.clears(Level.VIEWER) || plugin.hasPermission(player, Permission.ADMIN_LIST)) {
+            if (player == null || !list.isRestricted() || level.clears(PrivilegeLevel.VIEWER) || plugin.hasPermission(player, Permission.ADMIN_LIST)) {
                 lists.add(list);
             }
         }

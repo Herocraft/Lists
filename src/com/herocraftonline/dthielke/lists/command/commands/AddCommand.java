@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import com.herocraftonline.dthielke.lists.Lists;
 import com.herocraftonline.dthielke.lists.PrivilegedList;
 import com.herocraftonline.dthielke.lists.Lists.Permission;
-import com.herocraftonline.dthielke.lists.PrivilegedList.Level;
+import com.herocraftonline.dthielke.lists.PrivilegedList.PrivilegeLevel;
 import com.herocraftonline.dthielke.lists.command.BaseCommand;
 import com.herocraftonline.dthielke.lists.util.Messaging;
 
@@ -52,9 +52,9 @@ public class AddCommand extends BaseCommand {
                 return;
             }
 
-            Level senderPrivilege = list.get(name);
+            PrivilegeLevel senderPrivilege = list.get(name);
 
-            if (!senderPrivilege.clears(Level.MODIFIER)) {
+            if (!senderPrivilege.clears(PrivilegeLevel.MODIFIER)) {
                 Messaging.send(plugin, sender, "You cannot modify $1.", args[0]);
                 return;
             }
@@ -62,7 +62,7 @@ public class AddCommand extends BaseCommand {
 
         for (int i = 1; i < args.length; i++) {
             if (!list.contains(args[i])) {
-                list.put(args[i], Level.NONE);
+                list.put(args[i], PrivilegeLevel.NONE);
             }
         }
         plugin.saveList(list);

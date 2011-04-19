@@ -5,34 +5,45 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/***
+ * Stores a list of players that can be created by users and passed between plugins.
+ * Each member of a list has one of four <code>PrivilegeLevel</code>s. Each level inherits the privileges of the previous level.</br></br>
+ * Privilege Levels:</br>
+ * <ol>
+ *     <li><code>NONE</code> (n) - No privileges. If the list is restricted, such a user cannot see the list.</li>
+ *     <li><code>VIEWER</code> (v) - Basic viewing privileges, even if the list is restricted.</li>
+ *     <li><code>MODIFIER</code> (m) - The user can add, modify and remove players from the list. Can promote players up to VIEWER.</li>
+ *     <li><code>OWNER</code> (o) - The user can delete the list. Can promote players up to MODIFIER.</li>
+ * </ol>
+ */
 public class PrivilegedList {
 
     /***
      * Enumeration of the four available privilege levels for members of a list.
      */
-    public enum Level {
+    public enum PrivilegeLevel {
         NONE("n"),
         VIEWER("v"),
         MODIFIER("m"),
         OWNER("o");
 
-        private static final HashMap<String, Level> mapping = new HashMap<String, Level>();
+        private static final HashMap<String, PrivilegeLevel> mapping = new HashMap<String, PrivilegeLevel>();
         public final String abbreviation;
 
         static {
-            for (Level level : EnumSet.allOf(Level.class)) {
+            for (PrivilegeLevel level : EnumSet.allOf(PrivilegeLevel.class)) {
                 mapping.put(level.abbreviation, level);
             }
         }
 
-        private Level(String abbreviation) {
+        private PrivilegeLevel(String abbreviation) {
             this.abbreviation = abbreviation;
         }
 
-        public static Level parse(String name) {
-            Level mappedLevel = mapping.get(name);
+        public static PrivilegeLevel parse(String name) {
+            PrivilegeLevel mappedLevel = mapping.get(name);
             if (mappedLevel == null) {
-                for (Level level : EnumSet.allOf(Level.class)) {
+                for (PrivilegeLevel level : EnumSet.allOf(PrivilegeLevel.class)) {
                     System.out.println(name);
                     System.out.println(level.name());
                     if (name.equalsIgnoreCase(level.name())) {
@@ -45,14 +56,14 @@ public class PrivilegedList {
             }
         }
 
-        public boolean clears(Level reference) {
+        public boolean clears(PrivilegeLevel reference) {
             return this.ordinal() >= reference.ordinal();
         }
     }
 
     private String name;
     private boolean restricted;
-    private Map<String, Level> users = new HashMap<String, Level>();
+    private Map<String, PrivilegeLevel> users = new HashMap<String, PrivilegeLevel>();
 
     /***
      * Creates a new list with a specified name. By default, a list is unrestricted, so anyone can view its members.
@@ -77,7 +88,7 @@ public class PrivilegedList {
 
     public String toString() {
         String map = "[";
-        for (Entry<String, Level> entry : users.entrySet()) {
+        for (Entry<String, PrivilegeLevel> entry : users.entrySet()) {
             map += entry.getKey() + ":" + entry.getValue().abbreviation + ", ";
         }
         if (users.size() != 0) {
@@ -92,11 +103,11 @@ public class PrivilegedList {
         return users.containsKey(name.toLowerCase());
     }
 
-    public void put(String name, Level level) {
+    public void put(String name, PrivilegeLevel level) {
         users.put(name.toLowerCase(), level);
     }
 
-    public Level get(String name) {
+    public PrivilegeLevel get(String name) {
         if (contains(name)) {
             return users.get(name.toLowerCase());
         } else {
@@ -104,11 +115,11 @@ public class PrivilegedList {
         }
     }
 
-    public Map<String, Level> getUsers() {
+    public Map<String, PrivilegeLevel> getUsers() {
         return users;
     }
 
-    public void setUsers(Map<String, Level> users) {
+    public void setUsers(Map<String, PrivilegeLevel> users) {
         this.users = users;
     }
 

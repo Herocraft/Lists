@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.herocraftonline.dthielke.lists.PrivilegedList;
-import com.herocraftonline.dthielke.lists.PrivilegedList.Level;
+import com.herocraftonline.dthielke.lists.PrivilegedList.PrivilegeLevel;
 
 public class ListsSQLHandler extends SQLHandler {
 
@@ -99,7 +99,7 @@ public class ListsSQLHandler extends SQLHandler {
                 ResultSet usersResult = stmtSelectUsers.executeQuery();
                 while (usersResult.next()) {
                     String user = usersResult.getString("name");
-                    Level level = Level.values()[usersResult.getByte("level")];
+                    PrivilegeLevel level = PrivilegeLevel.values()[usersResult.getByte("level")];
                     list.put(user, level);
                 }
 
@@ -165,7 +165,7 @@ public class ListsSQLHandler extends SQLHandler {
             int listId = keyResult.getInt(1);
 
             // add the users
-            Map<String, Level> users = list.getUsers();
+            Map<String, PrivilegeLevel> users = list.getUsers();
             for (String user : users.keySet()) {
                 stmtInsertUser.setString(1, user);
                 stmtInsertUser.setByte(2, (byte) users.get(user).ordinal());
@@ -190,7 +190,7 @@ public class ListsSQLHandler extends SQLHandler {
             }
 
             // update the users
-            Map<String, Level> users = list.getUsers();
+            Map<String, PrivilegeLevel> users = list.getUsers();
             for (String user : users.keySet()) {
                 stmtSelectUser.setString(1, user);
                 stmtSelectUser.setInt(2, listId);
@@ -204,7 +204,7 @@ public class ListsSQLHandler extends SQLHandler {
                     stmtInsertUser.executeUpdate();
                 } else {
                     // if so, update the user
-                    Level level = Level.values()[userResult.getByte("level")];
+                    PrivilegeLevel level = PrivilegeLevel.values()[userResult.getByte("level")];
                     if (level != users.get(user)) {
                         stmtUpdateUser.setByte(1, (byte) users.get(user).ordinal());
                         stmtUpdateUser.setString(2, user);

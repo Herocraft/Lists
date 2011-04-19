@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import com.herocraftonline.dthielke.lists.Lists;
 import com.herocraftonline.dthielke.lists.PrivilegedList;
 import com.herocraftonline.dthielke.lists.Lists.Permission;
-import com.herocraftonline.dthielke.lists.PrivilegedList.Level;
+import com.herocraftonline.dthielke.lists.PrivilegedList.PrivilegeLevel;
 import com.herocraftonline.dthielke.lists.command.BaseCommand;
 import com.herocraftonline.dthielke.lists.util.Messaging;
 
@@ -43,7 +43,7 @@ public class RemoveCommand extends BaseCommand {
 		if (player != null) {
 			String name = player.getName();
 
-			if (!list.get(name).clears(Level.MODIFIER)) {
+			if (!list.get(name).clears(PrivilegeLevel.MODIFIER)) {
 				Messaging.send(plugin, sender, "You cannot modify $1.", args[0]);
 				return;
 			}

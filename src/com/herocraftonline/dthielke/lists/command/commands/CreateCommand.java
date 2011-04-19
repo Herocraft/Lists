@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import com.herocraftonline.dthielke.lists.Lists;
 import com.herocraftonline.dthielke.lists.PrivilegedList;
 import com.herocraftonline.dthielke.lists.Lists.Permission;
-import com.herocraftonline.dthielke.lists.PrivilegedList.Level;
+import com.herocraftonline.dthielke.lists.PrivilegedList.PrivilegeLevel;
 import com.herocraftonline.dthielke.lists.command.BaseCommand;
 import com.herocraftonline.dthielke.lists.util.Messaging;
 
@@ -43,7 +43,7 @@ public class CreateCommand extends BaseCommand {
         list = new PrivilegedList(args[0]);
 
 		if (player != null) {
-			list.put(player.getName(), Level.OWNER);
+			list.put(player.getName(), PrivilegeLevel.OWNER);
 		}
 
 		if (args.length == 2 && args[1].equals("-r")) {

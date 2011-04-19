@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import com.herocraftonline.dthielke.lists.Lists;
 import com.herocraftonline.dthielke.lists.PrivilegedList;
 import com.herocraftonline.dthielke.lists.Lists.Permission;
-import com.herocraftonline.dthielke.lists.PrivilegedList.Level;
+import com.herocraftonline.dthielke.lists.PrivilegedList.PrivilegeLevel;
 import com.herocraftonline.dthielke.lists.command.BaseCommand;
 import com.herocraftonline.dthielke.lists.util.Messaging;
 
@@ -48,7 +48,7 @@ public class DeleteCommand extends BaseCommand {
 				return;
 			}
 
-			if (!list.get(name).clears(Level.OWNER)) {
+			if (!list.get(name).clears(PrivilegeLevel.OWNER)) {
 				Messaging.send(plugin, sender, "You do not own $1.", args[0]);
 				return;
 			}

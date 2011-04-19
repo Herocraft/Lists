@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import com.herocraftonline.dthielke.lists.Lists;
 import com.herocraftonline.dthielke.lists.PrivilegedList;
 import com.herocraftonline.dthielke.lists.Lists.Permission;
-import com.herocraftonline.dthielke.lists.PrivilegedList.Level;
+import com.herocraftonline.dthielke.lists.PrivilegedList.PrivilegeLevel;
 import com.herocraftonline.dthielke.lists.command.BaseCommand;
 import com.herocraftonline.dthielke.lists.util.Messaging;
 
@@ -44,10 +44,10 @@ public class PutCommand extends BaseCommand {
 			return;
 		}
 
-		Level privilege = Level.NONE;
+		PrivilegeLevel privilege = PrivilegeLevel.NONE;
 		if (args.length == 3) {
-			privilege = Level.parse(args[2].substring(1));
-			privilege = (privilege == null) ? Level.NONE : privilege;
+			privilege = PrivilegeLevel.parse(args[2].substring(1));
+			privilege = (privilege == null) ? PrivilegeLevel.NONE : privilege;
 		}
 
 		if (player != null && !plugin.hasPermission(player, Permission.ADMIN_PUT)) {
@@ -63,14 +63,14 @@ public class PutCommand extends BaseCommand {
 				return;
 			}
 
-			Level senderPrivilege = list.get(name);
+			PrivilegeLevel senderPrivilege = list.get(name);
 
-			if (!senderPrivilege.clears(Level.MODIFIER)) {
+			if (!senderPrivilege.clears(PrivilegeLevel.MODIFIER)) {
 				Messaging.send(plugin, sender, "You cannot modify $1.", args[0]);
 				return;
 			}
 
-			if (senderPrivilege == Level.MODIFIER && privilege.clears(senderPrivilege)) {
+			if (senderPrivilege == PrivilegeLevel.MODIFIER && privilege.clears(senderPrivilege)) {
 				Messaging.send(plugin, sender, "You cannot set a privilege equal to or higher than your own.");
 				return;
 			}
