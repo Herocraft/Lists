@@ -8,6 +8,6 @@
 #    password: 
 database:
     driver: 'org.sqlite.JDBC'
-    URL: 'jdbc:sqlite:plugins/HeroList/herolist.db'
+    URL: 'jdbc:sqlite:plugins/Lists/lists.db'
     user: 
     password: 

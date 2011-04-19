@@ -181,7 +181,7 @@ public class Lists extends JavaPlugin {
 
     public boolean hasPermission(Player player, Permission permission) {
         if (security != null) {
-            return security.has(player, "herolist." + permission.node);
+            return security.has(player, "lists." + permission.node);
         } else {
             return player.isOp();
         }
@@ -208,7 +208,7 @@ public class Lists extends JavaPlugin {
     }
 
     public void log(Level level, String msg) {
-        log.log(level, "[HeroList] " + msg);
+        log.log(level, "[Lists] " + msg);
     }
 
     public CommandManager getCommandManager() {
