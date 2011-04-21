@@ -36,8 +36,7 @@ import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 
 /***
- * Bukkit plugin which allows users to create persistent lists of players that can be accessed and modified by other plugins.
- * Lists are typically stored in SQLite or MySQL databases, but all storage is handled internally.
+ * Bukkit plugin which allows users to create persistent lists of players that can be accessed and modified by other plugins. Lists are typically stored in SQLite or MySQL databases, but all storage is handled internally.
  */
 public class Lists extends JavaPlugin {
 
@@ -156,7 +155,7 @@ public class Lists extends JavaPlugin {
         checkConfig();
         Configuration config = new Configuration(new File(getDataFolder(), "config.yml"));
         config.load();
-        
+
         String driver = config.getString("database.driver");
         String url = config.getString("database.URL");
         String user = config.getString("database.user", "");
@@ -175,7 +174,7 @@ public class Lists extends JavaPlugin {
             }
         }
     }
-    
+
     private void checkConfig() {
         File configFile = new File(getDataFolder(), "config.yml");
         if (!configFile.exists()) {
@@ -208,10 +207,19 @@ public class Lists extends JavaPlugin {
         if (security != null) {
             return security.has(player, "lists." + permission.node);
         } else {
-            return player.isOp();
+            switch (permission) {
+            case ADMIN_ADD:
+            case ADMIN_DELETE:
+            case ADMIN_LIST:
+            case ADMIN_PUT:
+            case ADMIN_VIEW:
+                return player.isOp();
+            default:
+                return true;
+            }
         }
     }
-    
+
     /***
      * Returns an array of all existing lists.
      * 
@@ -224,7 +232,8 @@ public class Lists extends JavaPlugin {
     /***
      * Gets an existing list by its name.
      * 
-     * @param name the name of the list (case-sensitive)
+     * @param name
+     *            the name of the list (case-sensitive)
      * @return the <code>PrivilegedList</code> associated with the name, or <code>null</code> if no such list exists
      */
     public PrivilegedList getList(String name) {
@@ -234,7 +243,8 @@ public class Lists extends JavaPlugin {
     /***
      * Saves a new list or updates an existing list.
      * 
-     * @param list the <code>PrivilegedList</code> to save
+     * @param list
+     *            the <code>PrivilegedList</code> to save
      */
     public void saveList(PrivilegedList list) {
         lists.put(list.getName(), list);
@@ -244,7 +254,8 @@ public class Lists extends JavaPlugin {
     /***
      * Deletes a list from memory and the database.
      * 
-     * @param list the <code>PrivilegedList</code> to delete
+     * @param list
+     *            the <code>PrivilegedList</code> to delete
      */
     public void deleteList(PrivilegedList list) {
         log(Level.INFO, "Deleting list " + list);
