@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -227,6 +229,23 @@ public class Lists extends JavaPlugin {
      */
     public final PrivilegedList[] getLists() {
         return lists.values().toArray(new PrivilegedList[0]);
+    }
+
+    /***
+     * Returns an array of all lists containing the provided player name.
+     * 
+     * @param playerName
+     *            the name of a player
+     * @return an array containing all <code>PrivilegedList</code>s the player is a member of
+     */
+    public final PrivilegedList[] getLists(String playerName) {
+        List<PrivilegedList> list = new ArrayList<PrivilegedList>();
+        for (PrivilegedList pl : lists.values()) {
+            if (pl.contains(playerName)) {
+                list.add(pl);
+            }
+        }
+        return list.toArray(new PrivilegedList[0]);
     }
 
     /***
