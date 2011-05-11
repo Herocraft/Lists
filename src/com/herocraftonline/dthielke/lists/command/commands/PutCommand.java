@@ -78,7 +78,7 @@ public class PutCommand extends BaseCommand {
 
 		list.put(args[1], privilege);
 		plugin.saveList(list);
-		Messaging.send(plugin, sender, "Added $1 to $2 with $3 privileges.", args[1], args[0], privilege.name());
+		Messaging.send(plugin, sender, "Added $1 to $2 with $3 privileges.", args[1], list.getName(), privilege.name());
 
 	}
 

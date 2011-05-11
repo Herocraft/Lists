@@ -100,11 +100,11 @@ public class ListsSQLHandler extends SQLHandler {
                 while (usersResult.next()) {
                     String user = usersResult.getString("name");
                     PrivilegeLevel level = PrivilegeLevel.values()[usersResult.getByte("level")];
-                    list.put(user, level);
+                    list.put(user.toLowerCase(), level);
                 }
 
                 // add the list to the map
-                map.put(name, list);
+                map.put(name.toLowerCase(), list);
             }
         } catch (SQLException e) {
             e.printStackTrace();

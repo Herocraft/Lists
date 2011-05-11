@@ -36,7 +36,7 @@ public class CreateCommand extends BaseCommand {
 	    
 	    PrivilegedList list = plugin.getList(args[0]);
         if (list != null) {
-			Messaging.send(plugin, sender, "The list name $1 is already being used.", args[0]);
+			Messaging.send(plugin, sender, "The list name $1 is already being used.", list.getName());
 			return;
 		}
         
@@ -52,7 +52,7 @@ public class CreateCommand extends BaseCommand {
 
 		list.setName(args[0]);
 		plugin.saveList(list);
-		Messaging.send(plugin, sender, "Created the list $1.", args[0]);
+		Messaging.send(plugin, sender, "Created the list $1.", list.getName());
 	}
 
 }

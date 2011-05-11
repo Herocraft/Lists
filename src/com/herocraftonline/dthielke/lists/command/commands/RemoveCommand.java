@@ -56,7 +56,7 @@ public class RemoveCommand extends BaseCommand {
 
 		list.remove(args[1]);
 		plugin.saveList(list);
-		Messaging.send(plugin, sender, "Removed player $1 from $2.", args[1], args[0]);
+		Messaging.send(plugin, sender, "Removed player $1 from $2.", args[1], list.getName());
 	}
 
 }

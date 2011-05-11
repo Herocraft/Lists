@@ -55,7 +55,7 @@ public class DeleteCommand extends BaseCommand {
 		}
 
 		plugin.deleteList(list);
-		Messaging.send(plugin, sender, "Deleted list $1.", args[0]);
+		Messaging.send(plugin, sender, "Deleted list $1.", list.getName());
 	}
 
 }

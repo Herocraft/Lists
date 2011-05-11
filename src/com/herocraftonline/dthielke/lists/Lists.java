@@ -210,14 +210,14 @@ public class Lists extends JavaPlugin {
             return security.has(player, "lists." + permission.node);
         } else {
             switch (permission) {
-            case ADMIN_ADD:
-            case ADMIN_DELETE:
-            case ADMIN_LIST:
-            case ADMIN_PUT:
-            case ADMIN_VIEW:
-                return player.isOp();
-            default:
-                return true;
+                case ADMIN_ADD:
+                case ADMIN_DELETE:
+                case ADMIN_LIST:
+                case ADMIN_PUT:
+                case ADMIN_VIEW:
+                    return player.isOp();
+                default:
+                    return true;
             }
         }
     }
@@ -252,11 +252,11 @@ public class Lists extends JavaPlugin {
      * Gets an existing list by its name.
      * 
      * @param name
-     *            the name of the list (case-sensitive)
+     *            the name of the list (case-insensitive)
      * @return the <code>PrivilegedList</code> associated with the name, or <code>null</code> if no such list exists
      */
     public PrivilegedList getList(String name) {
-        return lists.get(name);
+        return lists.get(name.toLowerCase());
     }
 
     /***
@@ -266,7 +266,15 @@ public class Lists extends JavaPlugin {
      *            the <code>PrivilegedList</code> to save
      */
     public void saveList(PrivilegedList list) {
-        lists.put(list.getName(), list);
+        String newListName = list.getName();
+        for (Map.Entry<String, PrivilegedList> entry : lists.entrySet()) {
+            String existingListName = entry.getValue().getName();
+            if (existingListName.equalsIgnoreCase(newListName) && !existingListName.equals(newListName)) {
+                list.setName(existingListName);
+                break;
+            }
+        }
+        lists.put(list.getName().toLowerCase(), list);
         sql.saveList(list);
     }
 
@@ -278,7 +286,7 @@ public class Lists extends JavaPlugin {
      */
     public void deleteList(PrivilegedList list) {
         log(Level.INFO, "Deleting list " + list);
-        lists.remove(list.getName());
+        lists.remove(list.getName().toLowerCase());
         sql.deleteList(list.getName());
     }
 

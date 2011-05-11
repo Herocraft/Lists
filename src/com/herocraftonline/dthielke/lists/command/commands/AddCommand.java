@@ -66,7 +66,7 @@ public class AddCommand extends BaseCommand {
             }
         }
         plugin.saveList(list);
-        Messaging.send(plugin, sender, "Added players to $1 with no privileges.", args[0]);
+        Messaging.send(plugin, sender, "Added players to $1 with no privileges.", list.getName());
 
     }
 
